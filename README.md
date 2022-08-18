@@ -11,7 +11,7 @@ set -gx DB_HOST localhost
 set -gx DB_USER admin
 set -gx DB_PASS admin
 ```
-in bash and csh use EXPORT <varname>=value
+in bash and zsh use EXPORT <varname>=value
 
 ### The todo minimal rest example is running on port 8080.
 
