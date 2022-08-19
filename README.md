@@ -43,7 +43,7 @@ docker-compose up --build --force-recreate
 ```
 
 ### API Path is /api/todo
-supported methods are get /api/todo, get get/{id}, get /api/todo?finished=true|false,  post /api/todo to create, put /api/todo to update and delete to fly to the mars with elon musk.  
+supported methods are get /api/todo, get /api/todo/{id}, get /api/todo?finished=true|false,  post /api/todo to create, put /api/todo to update and delete to fly to the mars with elon musk.  
 
 #### Try out
 
