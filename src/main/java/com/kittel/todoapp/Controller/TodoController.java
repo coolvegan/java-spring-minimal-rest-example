@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/todo")
@@ -25,7 +26,7 @@ public class TodoController {
     public ResponseEntity<Object> create(@RequestBody Todo todo){
         try
         {
-           todoService.create(todo);
+            todoService.create(todo);
         }
         catch(Exception e){
             return ResponseHandler.generateResponse("Todo could not be created!", HttpStatus.BAD_REQUEST, todo);
@@ -58,11 +59,15 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> get(){
+    public ResponseEntity<Object> get(Optional<Boolean> finished){
         List list = null;
         try
         {
-            list = todoService.get();
+            if(finished.isPresent()){
+                list = todoService.get(finished.get());
+            } else {
+                list = todoService.get();
+            }
         }
         catch(Exception e){
             return ResponseHandler.generateResponse("Error", HttpStatus.BAD_REQUEST, "");

@@ -10,7 +10,7 @@ services:
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_NAME=${DB_NAME}
-      - DB_HIBERNATE_OPTION=create
+      - DB_HIBERNATE_OPTION=create-drop
     ports:
       - "8080:8080"
       - "5005:5005"

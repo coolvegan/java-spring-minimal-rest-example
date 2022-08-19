@@ -18,6 +18,10 @@ public class TodoService {
         return todoRepository.findAll();
     }
 
+    public List<Todo> get(boolean finished){
+        return todoRepository.findByStatus(finished);
+    }
+
     public Todo findById(long id) throws Exception {
         Optional<Todo> todo = todoRepository.findById(id);
         if (todo.isEmpty()){

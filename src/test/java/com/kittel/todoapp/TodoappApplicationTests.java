@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -82,9 +83,14 @@ class TodoappApplicationTests {
 	@Test
 	@DisplayName("TodoController Get Route should return status 200 and message body")
 	void testTodoControllerGet() throws Exception {
+		//Todo learn how to test controller
 		TodoController controller = new TodoController(new TodoService(todoRepository));
-		Assertions.assertEquals(HttpStatus.OK, controller.get().getStatusCode());
-		Assertions.assertEquals("{data=[], message=Success, status=200}", controller.get().getBody().toString());
+		Boolean param = false;
+		Optional<Boolean> finished = Optional.of(param);
+		Assertions.assertEquals(HttpStatus.OK, controller.get(finished).getStatusCode());
+		Assertions.assertEquals("{data=[], message=Success, status=200}", controller.get(finished).getBody().toString());
 	}
 
+	//Todo: Study article about DataJpaTest
+	//https://reflectoring.io/spring-boot-data-jpa-test/
 }

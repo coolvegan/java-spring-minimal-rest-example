@@ -7,9 +7,9 @@ In Fish Shell set your env vars like this
 ```
 set -gx DB_NAME todo
 set -gx DB_PORT 3306
-set -gx DB_HOST localhost
+set -gx DB_HOST hostname
 set -gx DB_USER admin
-set -gx DB_PASS admin
+set -gx DB_PASS strongpassword
 ```
 in bash and csh use EXPORT <varname>=value
 
@@ -31,6 +31,8 @@ in bash and csh use EXPORT <varname>=value
 ```
 
 ### dockerize the app with
+please note the database is created and getting dropped afterwards, change it in docker-compose.yaml or 
+application.properties
 ```
 docker-compose up 
 ```
@@ -41,7 +43,7 @@ docker-compose up --build --force-recreate
 ```
 
 ### API Path is /api/todo
-supported methods are get, get/{id}, post to create, put to update and delete to fly to the mars with elon musk.  
+supported methods are get /api/todo, get get/{id}, get /api/todo?finished=true|false,  post /api/todo to create, put /api/todo to update and delete to fly to the mars with elon musk.  
 
 #### Try out
 
@@ -51,4 +53,46 @@ curl -X PUT http://localhost:8080/api/todo -H 'Content-Type: application/json' -
 curl -X DELETE http://localhost:8080/api/todo -H 'Content-Type: application/json' -d '{ "id": 1, "description":"learn c++", "finished":false}'
 curl -X GET http://localhost:8080/api/todo 
 curl -X GET http://localhost:8080/api/todo/1
+curl -X GET http://localhost:8080/api/todo?finished=false
+curl -X GET http://localhost:8080/api/todo?finished=true
+```
+
+
+
+
+##### Personal Notes
+I played with this setup. It was not the right thing to couple these things together. It is only useful for
+testing in the hibernate create-drop context or if you have your mariadatabase folder anywhere and you want to 
+use it mounted as volume in a container, then you have to change the DB_HIBERNATE_OPTION=update or better delete this
+parameter from application.properties and set it there
+```
+services:
+  mariadb:
+    image: mariadb:10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: <root_user>
+      MYSQL_DATABASE: <db_name>
+      MYSQL_USER: <root_user>
+      MYSQL_PASSWORD: <root_user>
+    ports:
+      - '3306:3306'
+    restart: on-failure
+    volumes:
+      - ${PWD}/mariadb:/var/lib/mysql
+  spring-boot:
+    image: spring-boot
+    build:
+      context: .
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_HIBERNATE_OPTION=create-drop
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    depends:
+      - mariadb   
 ```
